@@ -1,0 +1,8 @@
+Args in experiment:
+Namespace(activation='gelu', affine=0, batch_size=10, c_out=7, checkpoints='./checkpoints/', d_ff=128, d_layers=1, d_model=128, data='ETTm1', data_path='ETTm1.csv', dec_in=7, decomposition=0, des='Exp', devices='0', distil=True, do_predict=False, dropout=0.3, e_layers=3, embed='timeF', embed_type=0, enc_in=7, factor=1, fc_dropout=0.3, features='M', freq='h', frequency=50.0, gpu=0, head_dropout=0.0, individual=0, is_training=1, itr=100, kernel_size=25, label_len=48, learning_rate=0.0001, loss='mse', lradj='TST', model='new1TST', model_id='30_1', momentum=0.8000005119175486, moving_avg=25, n_heads=4, num_workers=10, output_attention=False, padding_patch='end', patch_len=16, patience=8, pct_start=0.4, pred_len=1, random_seed=2021, revin=1, root_path='./dataset/', sampling_rate=100, seq_len=30, stride=8, subtract_last=0, target='OT', test_flop=False, train_epochs=100, use_amp=False, use_gpu=True, use_multi_gpu=False, x=5)
+Use GPU: cuda:0
+{'learning_rate': 1e-08, 'momentum': 0.8000005119175486, 'e_layers': 3, 'n_heads': 4, 'x': 5, 'd_ff': 128, 'dropout': 0.3, 'fc_dropout': 0.3, 'head_dropout': 0, 'batch_size': 10}
+>>>>>>>start training : 30_1_new1TST_ETTm1_ftM_sl30_ll48_pl1_dm128_nh4_el3_dl1_df128_fc1_ebtimeF_dtTrue_Exp_0>>>>>>>>>>>>>>>>>>>>>>>>>>
+train 34530
+val 11520
+test 11520
