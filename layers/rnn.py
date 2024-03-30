@@ -88,7 +88,7 @@ class SimpleRNN(nn.Module):
                     print(f'{h.shape = }') # h.shape = torch.Size([896, 1, 512])
                 all_h.append(h.unsqueeze(1))
             rnn_out = torch.cat(all_h, dim=1)
-        elif self.configs.rnn_base_model in ['UMixer', 'TimeMixer']:
+        elif self.configs.rnn_base_model in ['UMixer']:
             if self.configs.debug:
                 print(f'{batch_x.shape[1] = }')
             x_h = torch.zeros(batch_x.shape[0], 1, self.hidden_size).to(batch_x.device)

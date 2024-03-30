@@ -113,18 +113,7 @@ parser.add_argument('--devices', type=str, default='0,1', help='device ids of mu
 parser.add_argument('--test_flop', action='store_true', default=False, help='See utils/tools for usage')
 parser.add_argument('--x', type=int, default=5, help='x * n_heads = d_model')
 
-if rnn_base_model == 'TimeMixer':
-    # down_sampling
-    parser.add_argument('--only_use_down_sampling', type=bool, default=False, help='only use down sampling')
-    parser.add_argument('--pred_down_sampling', type=bool, default=False, help='whether to down sampling in pred seq')
-    parser.add_argument('--down_sampling_layers', type=int, default=0, help='num of down sampling layers')
-    parser.add_argument('--down_sampling_window', type=int, default=1, help='down sampling window size')
-    parser.add_argument('--down_sampling_method', type=str, default=None, help='down sampling method')
-
-    parser.add_argument('--channel_independent', type=int, default=1,
-                        help='whether to channel independent; True 1 False 0')
-    parser.add_argument('--use_graph', type=int, default=0, help='whether to use graph structure; True 1 False 0')
-elif rnn_base_model == 'UMixer':
+if rnn_base_model == 'UMixer':
     parser.add_argument('--patch_embbeding', type=int, default=4)
 
 args = parser.parse_args()
