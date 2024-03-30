@@ -37,13 +37,10 @@ do
       --fc_dropout 0.3\
       --head_dropout 0\
       --patch_len 96\
-      --stride 84\
+      --stride 53\
       --hidden_size 651 \
       --des 'Exp' \
       --train_epochs 100\
-      --devices 0 \
-      --frequency 50 \
-      --sampling_rate 100 \
       --itr 1 \
       --batch_size 258 \
       --learning_rate 0.001545 >logs/LongForecasting/$model_name'_'$model_id_name'_'$seq_len'_'$pred_len.log

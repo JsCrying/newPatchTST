@@ -8,6 +8,15 @@ from layers.PatchTST_layers import *
 from layers.RevIN import RevIN
 from layers.rnn import SimpleRNN
 
+
+def adjust_sequence_for_stride(x, seq_len, patch_len, stride):
+    num_patches_without_padding = (seq_len - patch_len) // stride + 1    # 计算不进行padding时，可以切分出的patch数量
+    last_patch_start = (num_patches_without_padding - 1) * stride        # 计算最后一个patch开始的位置
+    total_pad_length = max(0, last_patch_start + patch_len - seq_len)    # 判断最后一个patch是否能够完整切分，并计算需要的padding长度
+    x_padded = F.pad(x, (0, total_pad_length), 'constant', 0)            # 应用padding
+    return x_padded
+
+
 class PatchTST_backbone(nn.Module):
     def __init__(self, c_in: int, context_window: int, target_window: int, patch_len: int, stride: int,
                  max_seq_len: Optional[int] = 1024,
@@ -61,6 +70,7 @@ class PatchTST_backbone(nn.Module):
             print(f'{batch_y_mark.shape = }')
             print()
         # Reshape input to combine channel and patch dimension
+        batch_x = adjust_sequence_for_stride(batch_x, seq_len, self.patch_len, self.stride)
         patches_batch_x = batch_x.unfold(2, self.patch_len, self.stride).contiguous()     # [batch_size, channel, num_patches, patch_len]
         if self.configs.debug:
             print(f'{patches_batch_x.shape = }')
@@ -71,6 +81,7 @@ class PatchTST_backbone(nn.Module):
 
         # imitate batch_x
         # TODO
+        batch_x_mark = adjust_sequence_for_stride(batch_x_mark, seq_len, self.patch_len, self.stride)
         patches_batch_x_mark = batch_x_mark.unfold(2, self.patch_len, self.stride).contiguous()     # [batch_size, channel, num_patches, patch_len]
         if self.configs.debug:
             print(f'{patches_batch_x_mark.shape = }')
