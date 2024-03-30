@@ -205,3 +205,7 @@ Updating learning rate to 0.0006281607392303715
 	iters: 100, epoch: 29 | loss: 0.5561192
 	speed: 25.1482s/iter; left time: 328863.0395s
 Epoch: 29 cost time: 2219.727924823761
+[2024-03-30 15:29:14] [32mIntermediate result: 0.22582155  (Index 28)[0m
+Epoch: 29, Steps: 183 | Train Loss: 0.5075608 Vali Loss: 0.5056841 Test Loss: 0.2258216
+Validation loss decreased (0.506498 --> 0.505684).  Saving model ...
+Updating learning rate to 0.0005653446653073344
