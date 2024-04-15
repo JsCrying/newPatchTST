@@ -5,8 +5,12 @@ from exp.exp_main import Exp_Main
 import random
 import numpy as np
 
-rnn_base_model = 'UMixer'
+# rnn_base_model = 'UMixer'
 # rnn_base_model = 'DLinear'
+rnn_base_model = 'PatchTST_real'
+# rnn_base_model = 'TCN'
+# rnn_base_model = 'FreTS'
+debugControl = False
 
 parser = argparse.ArgumentParser(description='Autoformer & Transformer family for Time Series Forecasting')
 
@@ -115,22 +119,85 @@ parser.add_argument('--x', type=int, default=5, help='x * n_heads = d_model')
 
 if rnn_base_model == 'UMixer':
     parser.add_argument('--patch_embbeding', type=int, default=4)
+elif rnn_base_model == 'TCN':
+#     parser.add_argument('--batch_size', type=int, default=32, metavar='N',
+#                         help='batch size (default: 32)')
+#     parser.add_argument('--cuda', action='store_false',
+#                         help='use CUDA (default: True)')
+#     parser.add_argument('--clip', type=float, default=-1,
+#                         help='gradient clip, -1 means no clip (default: -1)')
+#     parser.add_argument('--epochs', type=int, default=10,
+#                         help='upper epoch limit (default: 10)')
+    parser.add_argument('--levels', type=int, default=8,
+                        help='# of levels (default: 8)')
+#     parser.add_argument('--seq_len', type=int, default=400,
+#                         help='sequence length (default: 400)')
+#     parser.add_argument('--log-interval', type=int, default=100, metavar='N',
+#                         help='report interval (default: 100')
+#     parser.add_argument('--lr', type=float, default=4e-3,
+#                         help='initial learning rate (default: 4e-3)')
+#     parser.add_argument('--optim', type=str, default='Adam',
+#                         help='optimizer to use (default: Adam)')
+    parser.add_argument('--nhid', type=int, default=30,
+                        help='number of hidden units per layer (default: 30)')
+#     parser.add_argument('--seed', type=int, default=1111,
+#                         help='random seed (default: 1111)')
+elif rnn_base_model == 'FreTS':
+    # Formers
+    parser.add_argument('--embed_type', type=int, default=0, help='0: default 1: value embedding + temporal embedding + positional embedding 2: value embedding + temporal embedding 3: value embedding + positional embedding 4: value embedding')
+    parser.add_argument('--enc_in', type=int, default=7, help='encoder input size')
+    parser.add_argument('--dec_in', type=int, default=7, help='decoder input size')
+    parser.add_argument('--c_out', type=int, default=7, help='output size')
+    parser.add_argument('--d_model', type=int, default=512, help='dimension of model')
+    parser.add_argument('--n_heads', type=int, default=8, help='num of heads')
+    parser.add_argument('--e_layers', type=int, default=2, help='num of encoder layers')
+    parser.add_argument('--d_layers', type=int, default=1, help='num of decoder layers')
+    parser.add_argument('--d_ff', type=int, default=2048, help='dimension of fcn')
+    parser.add_argument('--moving_avg', type=int, default=25, help='window size of moving average')
+    parser.add_argument('--factor', type=int, default=1, help='attn factor')
+    parser.add_argument('--distil', action='store_false',
+                        help='whether to use distilling in encoder, using this argument means not using distilling',
+                        default=True)
+    parser.add_argument('--dropout', type=float, default=0.05, help='dropout')
+    parser.add_argument('--embed', type=str, default='timeF',
+                        help='time features encoding, options:[timeF, fixed, learned]')
+    parser.add_argument('--activation', type=str, default='gelu', help='activation')
+    parser.add_argument('--output_attention', action='store_true', help='whether to output attention in ecoder')
+    parser.add_argument('--do_predict', action='store_true', help='whether to predict unseen future data')
+
+    # optimization
+    parser.add_argument('--num_workers', type=int, default=0, help='data loader num workers')
+    parser.add_argument('--itr', type=int, default=1, help='experiments times')
+    parser.add_argument('--train_epochs', type=int, default=10, help='train epochs')
+    parser.add_argument('--batch_size', type=int, default=8, help='batch size of train input data')
+    parser.add_argument('--patience', type=int, default=3, help='early stopping patience')
+    parser.add_argument('--learning_rate', type=float, default=0.0001, help='optimizer learning rate')
+    parser.add_argument('--des', type=str, default='Exp', help='exp description')
+    parser.add_argument('--loss', type=str, default='mse', help='loss function')
+    parser.add_argument('--lradj', type=str, default='type1', help='adjust learning rate')
+    parser.add_argument('--use_amp', action='store_true', help='use automatic mixed precision training', default=False)
+
 
 args = parser.parse_args()
 args.rnn_base_model = rnn_base_model
-args.debug = False
+args.debug = debugControl
 
 if rnn_base_model == 'UMixer':
     args.feature_in = 1
-
+elif rnn_base_model == 'TCN':
+    args.dropout = 0.2
+    args.kernel_size = 25
+elif rnn_base_model == 'PatchTST_real':
+    args.feature_in = 1
 # random seed
 fix_seed = args.random_seed
 random.seed(fix_seed)
 torch.manual_seed(fix_seed)
 np.random.seed(fix_seed)
 
-
 args.use_gpu = True if torch.cuda.is_available() and args.use_gpu else False
+if args.debug:
+    args.use_multi_gpu = False
 
 if args.use_gpu and args.use_multi_gpu:
     args.dvices = args.devices.replace(' ', '')

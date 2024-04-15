@@ -1,0 +1,33 @@
+Args in experiment:
+rnn_base_model = 'TCN'
+Namespace(random_seed=2021, is_training=1, model_id='96_720', model='PatchTST', data='custom', root_path='./dataset/', data_path='weather.csv', features='M', target='OT', freq='h', checkpoints='./checkpoints/', seq_len=96, label_len=48, pred_len=720, fc_dropout=0.2, head_dropout=0.0, patch_len=96, stride=84, padding_patch='end', revin=1, affine=0, subtract_last=0, decomposition=0, kernel_size=25, individual=0, embed_type=0, enc_in=21, dec_in=7, c_out=7, d_model=128, n_heads=16, e_layers=3, d_layers=1, d_ff=256, moving_avg=25, factor=1, distil=True, dropout=0.2, embed='timeF', activation='gelu', output_attention=False, do_predict=False, num_workers=10, itr=1, train_epochs=100, batch_size=200, patience=8, learning_rate=0.00875, des='Exp', loss='mse', lradj='type3', pct_start=0.3, use_amp=False, momentum=0.9669740372386173, frequency=0.05, sampling_rate=100, use_norm=True, hidden_size=1590, exp_name='MTSF', channel_independence=False, inverse=False, class_strategy='projection', target_root_path='./data/electricity/', target_data_path='electricity.csv', efficient_training=False, partial_start_index=0, top_k=5, num_kernels=6, use_gpu=True, gpu=0, use_multi_gpu=False, devices='0,1', test_flop=False, x=5, ksize=7, levels=8, nhid=30, rnn_base_model='TCN', debug=True)
+Use GPU: cuda:0
+>>>>>>>start training : 96_720_PatchTST_custom_ftM_sl96_ll48_pl720_dm128_nh16_el3_dl1_df256_fc1_ebtimeF_dtTrue_Exp_0>>>>>>>>>>>>>>>>>>>>>>>>>>
+train 36072
+val 4551
+test 9820
+IN exp_main.py
+batch_x.shape = torch.Size([200, 96, 21])
+batch_x_mark.shape = torch.Size([200, 96, 4])
+dec_inp.shape = torch.Size([200, 768, 21])
+batch_y_mark.shape = torch.Size([200, 768, 4])
+********************
+IN PatchTST_backbone.py
+batch_x.shape = torch.Size([200, 21, 96])
+batch_x_mark.shape = torch.Size([200, 4, 96])
+dec_inp.shape = torch.Size([200, 21, 768])
+batch_y_mark.shape = torch.Size([200, 4, 768])
+
+patches_batch_x.shape = torch.Size([200, 21, 1, 96])
+patches_batch_x_mark.shape = torch.Size([200, 4, 1, 96])
+patches_dec_inp.shape = torch.Size([200, 21, 9, 96])
+patches_batch_y_mark.shape = torch.Size([200, 4, 9, 96])
+
+patches_batch_x.shape = torch.Size([4200, 1, 96])
+patches_batch_x_mark.shape = torch.Size([800, 1, 96])
+patches_dec_inp.shape = torch.Size([4200, 9, 96])
+patches_batch_y_mark.shape = torch.Size([800, 9, 96])
+IN TCN.py
+x.shape = torch.Size([4200, 1, 96])
+IN TCN.py
+x.shape = torch.Size([4200, 1, 1, 1590])

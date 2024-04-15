@@ -45,3 +45,5 @@ do
       --batch_size 258 \
       --learning_rate 0.001545 >logs/LongForecasting/$model_name'_'$model_id_name'_'$seq_len'_'$pred_len.log
 done
+
+# bash scripts/PatchTST/etth1.sh

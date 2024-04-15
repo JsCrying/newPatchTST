@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from models import DLinear, PatchTST_real, TimesNet, UMixer, TimeMixer
+from models import DLinear, PatchTST_real, UMixer, TCN, FreTS
 import copy
 class SimpleRNN(nn.Module):
     def __init__(self, hidden_size, input_size, configs):
@@ -9,11 +9,11 @@ class SimpleRNN(nn.Module):
         def choose_model(configs):
             rnn_base_model = configs.rnn_base_model
             model_dict = {
-                'TimesNet': TimesNet,
                 'UMixer': UMixer,
-                'TimeMixer': TimeMixer,
                 'DLinear': DLinear,
                 'PatchTST_real': PatchTST_real,
+                'TCN': TCN,
+                'FreTS': FreTS
             }
             model = model_dict[rnn_base_model]
             return model
@@ -74,7 +74,7 @@ class SimpleRNN(nn.Module):
     def forward(self, batch_x, batch_x_mark, dec_inp, batch_y_mark):
         # x: [batch_size*channel, num_patches, input_size]
         rnn_out = []
-        if self.configs.rnn_base_model in ['DLinear', 'PatchTST_real']:
+        if self.configs.rnn_base_model in ['DLinear', 'PatchTST_real', 'TCN', 'FreTS']:
             batch_size, seq_len, _ = batch_x.shape
             # h = torch.zeros(batch_size, self.hidden_size).to(x.device)
             h = torch.zeros(batch_size, 1, self.hidden_size).to(batch_x.device)
@@ -83,10 +83,13 @@ class SimpleRNN(nn.Module):
                 batch_x_t = batch_x[:, t, :].unsqueeze(1)
                 # print("x_shape:",x_t.shape)
                 # h = torch.tanh(x_t @ self.Wx + h @ self.Wh + self.b)
+
                 h = torch.tanh(self.Wx(batch_x_t) + self.Wh(h) + self.bh)
                 if self.configs.debug:
+                    print('IN rnn.py')
                     print(f'{h.shape = }') # h.shape = torch.Size([896, 1, 512])
                 all_h.append(h.unsqueeze(1))
+                h = h.unsqueeze(1)
             rnn_out = torch.cat(all_h, dim=1)
         elif self.configs.rnn_base_model in ['UMixer']:
             if self.configs.debug:
@@ -107,25 +110,9 @@ class SimpleRNN(nn.Module):
                     self.Wh(x_h, x_mark_h, dec_inp_t, batch_y_mark_t) +
                     self.bh)
                 all_h.append(h.unsqueeze(1))
+                h = h.unsqueeze(1)
             rnn_out = torch.cat(all_h, dim=1)
-        elif self.configs.rnn_base_model in ['TimesNet']:
-            x_h = torch.zeros(batch_x.shape[0], 1, self.configs.patch_len).to(batch_x.device)
-            x_mark_h = torch.zeros(batch_x_mark.shape[0], 1, self.configs.patch_len).to(batch_x.device)
 
-            all_h = []
-
-            for t in range(batch_x.shape[1]):
-                batch_x_t = batch_x[:, t, :].unsqueeze(1)
-                batch_x_mark_t = batch_x_mark[:, t, :].unsqueeze(1)
-                dec_inp_t = dec_inp[:, t, :].unsqueeze(1)
-                batch_y_mark_t = batch_y_mark[:, t, :].unsqueeze(1)
-                # print("x_shape:",x_t.shape)
-                # h = torch.tanh(x_t @ self.Wx + h @ self.Wh + self.b)
-                h = torch.tanh(self.Wx(batch_x_t, batch_x_mark_t, dec_inp_t, batch_y_mark_t) + \
-                    self.Wh(x_h, x_mark_h, dec_inp_t, batch_y_mark_t) +
-                    self.bh)
-                all_h.append(h.unsqueeze(1))
-            rnn_out = torch.cat(all_h, dim=1)
         if self.configs.debug:
             print(f'{rnn_out.shape = }')
         return rnn_out

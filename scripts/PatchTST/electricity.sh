@@ -15,7 +15,7 @@ model_id_name=Electricity
 data_name=custom
 
 random_seed=2021
-for pred_len in 96
+for pred_len in 96 192 336 720
 do
     python -u run_longExp.py \
       --random_seed $random_seed \
@@ -36,12 +36,15 @@ do
       --dropout 0.2\
       --fc_dropout 0.2\
       --head_dropout 0\
-      --patch_len 16\
-      --stride 8\
+      --patch_len 81\
+      --stride 5\
+      --hidden_size 1078\
       --des 'Exp' \
       --train_epochs 100\
       --patience 10\
       --lradj 'TST'\
       --pct_start 0.2\
-      --itr 1 --batch_size 32 --learning_rate 0.0001 >logs/LongForecasting/$model_name'_'$model_id_name'_'$seq_len'_'$pred_len.log 
+      --use_multi_gpu \
+      --devices 0,1 \
+      --itr 1 --batch_size 40 --learning_rate 0.002424 >logs/LongForecasting/$model_name'_'$model_id_name'_'$seq_len'_'$pred_len.log
 done

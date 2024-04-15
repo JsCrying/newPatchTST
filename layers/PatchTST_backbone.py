@@ -55,7 +55,7 @@ class PatchTST_backbone(nn.Module):
 
     def forward(self, batch_x, batch_x_mark, dec_inp, batch_y_mark):
         # norm
-        if self.revin and self.configs.rnn_base_model in ['UMixer']:
+        if self.revin and self.configs.rnn_base_model in ['UMixer', 'PatchTST_real']:
             batch_x = batch_x.permute(0, 2, 1)
             batch_x = self.revin_layer(batch_x, 'norm')
             batch_x = batch_x.permute(0, 2, 1)

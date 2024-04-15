@@ -14,7 +14,7 @@ from layers.RevIN import RevIN
 
 # Cell
 class PatchTST_backbone(nn.Module):
-    def __init__(self, c_in:int, context_window:int, target_window:int, patch_len:int, stride:int, max_seq_len:Optional[int]=1024, 
+    def __init__(self, configs, c_in:int, context_window:int, target_window:int, patch_len:int, stride:int, max_seq_len:Optional[int]=1024,
                  n_layers:int=3, d_model=128, n_heads=16, d_k:Optional[int]=None, d_v:Optional[int]=None,
                  d_ff:int=256, norm:str='BatchNorm', attn_dropout:float=0., dropout:float=0., act:str="gelu", key_padding_mask:bool='auto',
                  padding_var:Optional[int]=None, attn_mask:Optional[Tensor]=None, res_attention:bool=True, pre_norm:bool=False, store_attn:bool=False,
@@ -23,7 +23,8 @@ class PatchTST_backbone(nn.Module):
                  verbose:bool=False, **kwargs):
         
         super().__init__()
-        
+
+        self.configs = configs
         # RevIn
         self.revin = revin
         if self.revin: self.revin_layer = RevIN(c_in, affine=affine, subtract_last=subtract_last)
@@ -58,22 +59,33 @@ class PatchTST_backbone(nn.Module):
         
     
     def forward(self, z):                                                                   # z: [bs x nvars x seq_len]
+        if self.configs.debug:
+            print('IN PatchTST_backbone_real')
+            print(f'{z.shape = }')
         # norm
         z = z.permute(0, 2, 1)
-        if self.revin: 
+        if self.configs.debug:
+            print(f'{z.shape = }')
+        if self.revin:
             z = z.permute(0,2,1)
             z = self.revin_layer(z, 'norm')
             z = z.permute(0,2,1)
         # do patching
         if self.padding_patch == 'end':
             z = self.padding_patch_layer(z)
+        if self.configs.debug:
+            print(f'{z.shape = }')
         z = z.unfold(dimension=-1, size=self.patch_len, step=self.stride)                   # z: [bs x nvars x patch_num x patch_len]
         z = z.permute(0,1,3,2)                                                              # z: [bs x nvars x patch_len x patch_num]
-        
+        if self.configs.debug:
+            print(f'{z.shape = }')
         # model
         z = self.backbone(z)                                                                # z: [bs x nvars x d_model x patch_num]
-        z = self.head(z)                                                                    # z: [bs x nvars x target_window] 
-        
+        if self.configs.debug:
+            print(f'{z.shape = }')
+        z = self.head(z)                                                                    # z: [bs x nvars x target_window]
+        if self.configs.debug:
+            print(f'{z.shape = }')
         # denorm
         if self.revin: 
             z = z.permute(0,2,1)
@@ -81,6 +93,8 @@ class PatchTST_backbone(nn.Module):
             z = z.permute(0,2,1)
 
         z = z.permute(0, 2, 1)
+        if self.configs.debug:
+            print(f'{z.shape = }')
         return z
     
     def create_pretrain_head(self, head_nf, vars, dropout):

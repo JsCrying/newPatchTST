@@ -13,19 +13,16 @@ from layers.PatchTST_layers import series_decomp
 
 
 class Model(nn.Module):
-    def __init__(self, configs, configs2=None, max_seq_len:Optional[int]=1024, d_k:Optional[int]=None, d_v:Optional[int]=None, norm:str='BatchNorm', attn_dropout:float=0.,
+    def __init__(self, configs, max_seq_len:Optional[int]=1024, d_k:Optional[int]=None, d_v:Optional[int]=None, norm:str='BatchNorm', attn_dropout:float=0.,
                  act:str="gelu", key_padding_mask:bool='auto',padding_var:Optional[int]=None, attn_mask:Optional[Tensor]=None, res_attention:bool=True, 
                  pre_norm:bool=False, store_attn:bool=False, pe:str='zeros', learn_pe:bool=True, pretrain_head:bool=False, head_type = 'flatten', verbose:bool=False, **kwargs):
         
         super().__init__()
-        
+        self.configs = configs
         # load parameters
-        c_in = configs.enc_in
+        c_in = configs.feature_in
         context_window = configs.seq_len
         target_window = configs.pred_len
-        # c_in = configs2['enc_in']
-        # context_window = configs2['seq_len']
-        # target_window = configs2['pred_len']
         
         n_layers = configs.e_layers
         n_heads = configs.n_heads
@@ -53,7 +50,7 @@ class Model(nn.Module):
         self.decomposition = decomposition
         if self.decomposition:
             self.decomp_module = series_decomp(kernel_size)
-            self.model_trend = PatchTST_backbone(c_in=c_in, context_window = context_window, target_window=target_window, patch_len=patch_len, stride=stride, 
+            self.model_trend = PatchTST_backbone(configs=configs, c_in=c_in, context_window = context_window, target_window=target_window, patch_len=patch_len, stride=stride,
                                   max_seq_len=max_seq_len, n_layers=n_layers, d_model=d_model,
                                   n_heads=n_heads, d_k=d_k, d_v=d_v, d_ff=d_ff, norm=norm, attn_dropout=attn_dropout,
                                   dropout=dropout, act=act, key_padding_mask=key_padding_mask, padding_var=padding_var, 
@@ -61,7 +58,7 @@ class Model(nn.Module):
                                   pe=pe, learn_pe=learn_pe, fc_dropout=fc_dropout, head_dropout=head_dropout, padding_patch = padding_patch,
                                   pretrain_head=pretrain_head, head_type=head_type, individual=individual, revin=revin, affine=affine,
                                   subtract_last=subtract_last, verbose=verbose, **kwargs)
-            self.model_res = PatchTST_backbone(c_in=c_in, context_window = context_window, target_window=target_window, patch_len=patch_len, stride=stride, 
+            self.model_res = PatchTST_backbone(configs=configs, c_in=c_in, context_window = context_window, target_window=target_window, patch_len=patch_len, stride=stride,
                                   max_seq_len=max_seq_len, n_layers=n_layers, d_model=d_model,
                                   n_heads=n_heads, d_k=d_k, d_v=d_v, d_ff=d_ff, norm=norm, attn_dropout=attn_dropout,
                                   dropout=dropout, act=act, key_padding_mask=key_padding_mask, padding_var=padding_var, 
@@ -70,7 +67,7 @@ class Model(nn.Module):
                                   pretrain_head=pretrain_head, head_type=head_type, individual=individual, revin=revin, affine=affine,
                                   subtract_last=subtract_last, verbose=verbose, **kwargs)
         else:
-            self.model = PatchTST_backbone(c_in=c_in, context_window = context_window, target_window=target_window, patch_len=patch_len, stride=stride, 
+            self.model = PatchTST_backbone(configs=configs, c_in=c_in, context_window = context_window, target_window=target_window, patch_len=patch_len, stride=stride,
                                   max_seq_len=max_seq_len, n_layers=n_layers, d_model=d_model,
                                   n_heads=n_heads, d_k=d_k, d_v=d_v, d_ff=d_ff, norm=norm, attn_dropout=attn_dropout,
                                   dropout=dropout, act=act, key_padding_mask=key_padding_mask, padding_var=padding_var, 
@@ -80,16 +77,22 @@ class Model(nn.Module):
                                   subtract_last=subtract_last, verbose=verbose, **kwargs)
     
     
-    def forward(self, x):           # x: [Batch, Input length, Channel]
+    def forward(self, x):           # x: [Batch, t(=1), patch_len]
         if self.decomposition:
             res_init, trend_init = self.decomp_module(x)
-            res_init, trend_init = res_init.permute(0,2,1), trend_init.permute(0,2,1)  # x: [Batch, Channel, Input length]
+            # res_init, trend_init = res_init.permute(0,2,1), trend_init.permute(0,2,1)
             res = self.model_res(res_init)
             trend = self.model_trend(trend_init)
             x = res + trend
-            x = x.permute(0,2,1)    # x: [Batch, Input length, Channel]
+            x = x.permute(0,2,1)    # x: [Batch, t(=1), patch_len]
         else:
-            x = x.permute(0,2,1)    # x: [Batch, Channel, Input length]
+            if self.configs.debug:
+                print(f'{x.shape = }')
+            x = x.permute(0,2,1)    # x: [Batch, patch_len, t(=1)] <=> x: [Batch, channels, input_length]
             x = self.model(x)
-            x = x.permute(0,2,1)    # x: [Batch, Input length, Channel]
+            x = x.permute(0,2,1)    # x: [Batch, t(=1), patch_len] <=> x: [Batch, input_length, channels,]
+        if self.configs.debug:
+            print('IN PatchTST_real')
+            print(f'{x.shape = }')
+            print()
         return x
