@@ -413,3 +413,5 @@ Updating learning rate to 0.002312626174306472
 	speed: 59.6661s/iter; left time: 1867308.8465s
 	iters: 200, epoch: 32 | loss: 0.1638163
 	speed: 27.2072s/iter; left time: 848755.6003s
+	iters: 300, epoch: 32 | loss: 0.2033514
+	speed: 27.1716s/iter; left time: 844928.8732s
