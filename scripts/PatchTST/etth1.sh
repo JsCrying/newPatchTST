@@ -36,7 +36,7 @@ do
       --dropout 0.3\
       --fc_dropout 0.3\
       --head_dropout 0\
-      --patch_len 96\
+      --patch_len 94\
       --stride 53\
       --hidden_size 651 \
       --des 'Exp' \
@@ -47,3 +47,9 @@ do
 done
 
 # bash scripts/PatchTST/etth1.sh
+
+#       --patch_len 94\
+#       --stride 53\
+
+#       --patch_len 48\
+#       --stride 48\

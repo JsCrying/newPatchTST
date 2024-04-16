@@ -73,6 +73,8 @@ class SimpleRNN(nn.Module):
 
     def forward(self, batch_x, batch_x_mark, dec_inp, batch_y_mark):
         # x: [batch_size*channel, num_patches, input_size]
+        if self.configs.debug:
+            print('IN rnn.py')
         rnn_out = []
         if self.configs.rnn_base_model in ['DLinear', 'PatchTST_real', 'TCN', 'FreTS']:
             batch_size, seq_len, _ = batch_x.shape
@@ -83,13 +85,15 @@ class SimpleRNN(nn.Module):
                 batch_x_t = batch_x[:, t, :].unsqueeze(1)
                 # print("x_shape:",x_t.shape)
                 # h = torch.tanh(x_t @ self.Wx + h @ self.Wh + self.b)
-
-                h = torch.tanh(self.Wx(batch_x_t) + self.Wh(h) + self.bh)
                 if self.configs.debug:
-                    print('IN rnn.py')
-                    print(f'{h.shape = }') # h.shape = torch.Size([896, 1, 512])
-                all_h.append(h.unsqueeze(1))
-                h = h.unsqueeze(1)
+                    print(f'[{t}]before tanh: {h.shape = }') # h.shape = torch.Size([896, 1, 512])
+                h = torch.tanh(self.Wx(batch_x_t) + self.Wh(h) + self.bh) # output should be 3-dim!!!
+                if self.configs.debug:
+                    print(f'[{t}]after tanh: {h.shape = }') # h.shape = torch.Size([896, 1, 512])
+                all_h.append(h)
+                # all_h.append(h.unsqueeze(1)) [b, 1, 1, h]
+                if self.configs.debug:
+                    print(f'[{t}]after put in all_h: {h.shape = }') # h.shape = torch.Size([896, 1, 512])
             rnn_out = torch.cat(all_h, dim=1)
         elif self.configs.rnn_base_model in ['UMixer']:
             if self.configs.debug:
@@ -110,7 +114,6 @@ class SimpleRNN(nn.Module):
                     self.Wh(x_h, x_mark_h, dec_inp_t, batch_y_mark_t) +
                     self.bh)
                 all_h.append(h.unsqueeze(1))
-                h = h.unsqueeze(1)
             rnn_out = torch.cat(all_h, dim=1)
 
         if self.configs.debug:

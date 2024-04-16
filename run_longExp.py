@@ -6,8 +6,8 @@ import random
 import numpy as np
 
 # rnn_base_model = 'UMixer'
-# rnn_base_model = 'DLinear'
-rnn_base_model = 'PatchTST_real'
+rnn_base_model = 'DLinear'
+# rnn_base_model = 'PatchTST_real'
 # rnn_base_model = 'TCN'
 # rnn_base_model = 'FreTS'
 debugControl = False
@@ -36,7 +36,7 @@ parser.add_argument('--checkpoints', type=str, default='./checkpoints/', help='l
 
 # forecasting task
 parser.add_argument('--seq_len', type=int, default=336, help='input sequence length')
-parser.add_argument('--label_len', type=int, default=48, help='start token length')
+parser.add_argument('--label_len', type=int, default=18, help='start token length')
 parser.add_argument('--pred_len', type=int, default=96, help='prediction sequence length')
 
 

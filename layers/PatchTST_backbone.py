@@ -55,7 +55,7 @@ class PatchTST_backbone(nn.Module):
 
     def forward(self, batch_x, batch_x_mark, dec_inp, batch_y_mark):
         # norm
-        if self.revin and self.configs.rnn_base_model in ['UMixer', 'PatchTST_real']:
+        if self.revin and self.configs.rnn_base_model in ['DLinear', 'UMixer', 'PatchTST_real']:
             batch_x = batch_x.permute(0, 2, 1)
             batch_x = self.revin_layer(batch_x, 'norm')
             batch_x = batch_x.permute(0, 2, 1)
@@ -120,14 +120,16 @@ class PatchTST_backbone(nn.Module):
         if self.configs.debug:
             print(f'{rnn_out.shape = }')
         last_patch_output = rnn_out[:, -1, :]   # [batch_size*channel, hidden_size]
-
+        if self.configs.debug:
+            print(f'{rnn_out.shape = }')
         output = self.fc(last_patch_output)  # Shape: [batch_size*channel, output_size]
-
+        if self.configs.debug:
+            print(f'{output.shape = }')
         # Reshape output to [batch_size, channel, target_window]  jason remark: target_window is output_size
         output = output.view(batch_size, self.c_in, self.target_window)
 
         # denorm
-        if self.revin and self.configs.rnn_base_model in ['UMixer']:
+        if self.revin and self.configs.rnn_base_model in ['DLinear', 'UMixer', 'PatchTST_real']:
             output = output.permute(0, 2, 1)
             output = self.revin_layer(output, 'denorm')
             output = output.permute(0, 2, 1)

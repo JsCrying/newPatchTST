@@ -78,6 +78,8 @@ class Model(nn.Module):
     
     
     def forward(self, x):           # x: [Batch, t(=1), patch_len]
+        if self.configs.debug:
+            print('IN PatchTST_real.py')
         if self.decomposition:
             res_init, trend_init = self.decomp_module(x)
             # res_init, trend_init = res_init.permute(0,2,1), trend_init.permute(0,2,1)
@@ -87,12 +89,12 @@ class Model(nn.Module):
             x = x.permute(0,2,1)    # x: [Batch, t(=1), patch_len]
         else:
             if self.configs.debug:
-                print(f'{x.shape = }')
+                print(f'before backbone: {x.shape = }')
             x = x.permute(0,2,1)    # x: [Batch, patch_len, t(=1)] <=> x: [Batch, channels, input_length]
             x = self.model(x)
             x = x.permute(0,2,1)    # x: [Batch, t(=1), patch_len] <=> x: [Batch, input_length, channels,]
         if self.configs.debug:
-            print('IN PatchTST_real')
-            print(f'{x.shape = }')
+            print(f'after backbone: {x.shape = }')
+        if self.configs.debug:
             print()
         return x

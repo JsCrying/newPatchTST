@@ -60,41 +60,43 @@ class PatchTST_backbone(nn.Module):
     
     def forward(self, z):                                                                   # z: [bs x nvars x seq_len]
         if self.configs.debug:
-            print('IN PatchTST_backbone_real')
-            print(f'{z.shape = }')
+            print('IN PatchTST_backbone_real.py')
+            print(f'in: {z.shape = }')
         # norm
         z = z.permute(0, 2, 1)
         if self.configs.debug:
-            print(f'{z.shape = }')
-        if self.revin:
-            z = z.permute(0,2,1)
-            z = self.revin_layer(z, 'norm')
-            z = z.permute(0,2,1)
+            print(f'after permute: {z.shape = }')
+        # if self.revin:
+        #     z = z.permute(0,2,1)
+        #     z = self.revin_layer(z, 'norm')
+        #     z = z.permute(0,2,1)
         # do patching
         if self.padding_patch == 'end':
             z = self.padding_patch_layer(z)
         if self.configs.debug:
-            print(f'{z.shape = }')
+            print(f'before unfold: {z.shape = }')
         z = z.unfold(dimension=-1, size=self.patch_len, step=self.stride)                   # z: [bs x nvars x patch_num x patch_len]
         z = z.permute(0,1,3,2)                                                              # z: [bs x nvars x patch_len x patch_num]
         if self.configs.debug:
-            print(f'{z.shape = }')
+            print(f'after unfold&permute: {z.shape = }')
         # model
         z = self.backbone(z)                                                                # z: [bs x nvars x d_model x patch_num]
         if self.configs.debug:
-            print(f'{z.shape = }')
+            print(f'after backbone: {z.shape = }')
         z = self.head(z)                                                                    # z: [bs x nvars x target_window]
         if self.configs.debug:
-            print(f'{z.shape = }')
+            print(f'after head: {z.shape = }')
         # denorm
-        if self.revin: 
-            z = z.permute(0,2,1)
-            z = self.revin_layer(z, 'denorm')
-            z = z.permute(0,2,1)
+        # if self.revin:
+        #     z = z.permute(0,2,1)
+        #     z = self.revin_layer(z, 'denorm')
+        #     z = z.permute(0,2,1)
 
         z = z.permute(0, 2, 1)
         if self.configs.debug:
-            print(f'{z.shape = }')
+            print(f'out: {z.shape = }')
+        if self.configs.debug:
+            print()
         return z
     
     def create_pretrain_head(self, head_nf, vars, dropout):
