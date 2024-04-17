@@ -110,10 +110,11 @@ class SimpleRNN(nn.Module):
                 batch_y_mark_t = batch_y_mark[:, t, :].unsqueeze(1)
                 # print("x_shape:",x_t.shape)
                 # h = torch.tanh(x_t @ self.Wx + h @ self.Wh + self.b)
-                h = torch.tanh(self.Wx(batch_x_t, batch_x_mark_t, dec_inp_t, batch_y_mark_t) + \
+                x_h = torch.tanh(self.Wx(batch_x_t, batch_x_mark_t, dec_inp_t, batch_y_mark_t) + \
                     self.Wh(x_h, x_mark_h, dec_inp_t, batch_y_mark_t) +
                     self.bh)
-                all_h.append(h.unsqueeze(1))
+                all_h.append(x_h.unsqueeze(1))
+                x_h = x_h.unsqueeze(1)
             rnn_out = torch.cat(all_h, dim=1)
 
         if self.configs.debug:

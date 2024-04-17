@@ -83,14 +83,11 @@ class Model(nn.Module):
         if self.configs.debug:
             print('IN TCN.py')
             print(f'IN: {x.shape = }')
-        x = x.permute(0, 2, 1)
-        if self.configs.debug:
-            print(f'after permute: {x.shape = }')
         y1 = self.tcn(x)
         if self.configs.debug:
             print(f'after tcn: {y1.shape = }')
         # y1 = self.linear(y1[:, :, -1])
-        y1 = self.linear(y1.permute(0, 2, 1))
+        y1 = self.linear(y1.permute(0, 2, 1)).permute(0, 2, 1)
         if self.configs.debug:
             print(f'after linear: {y1.shape = }')
         return y1

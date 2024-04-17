@@ -93,9 +93,6 @@ class Model(nn.Module):
             print(f'IN FreTS.py')
             print(f'IN: {x.shape = }')
         # x: [Batch, Input length, Channel]
-        x = x.permute(0, 2, 1)
-        if self.configs.debug:
-            print(f'after permute: {x.shape = }')
         B, T, N = x.shape
         # embedding x: [B, N, T, D]
         x = self.tokenEmb(x)
@@ -113,9 +110,6 @@ class Model(nn.Module):
         x = self.fc(x.reshape(B, N, -1)).permute(0, 2, 1)
         if self.configs.debug:
             print(f'after fc: {x.shape = }')
-        x = x.permute(0, 2, 1)
-        if self.configs.debug:
-            print(f'after permute: {x.shape = }')
         return x
 
 

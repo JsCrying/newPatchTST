@@ -6,10 +6,11 @@ import random
 import numpy as np
 
 # rnn_base_model = 'UMixer'
-rnn_base_model = 'DLinear'
+# rnn_base_model = 'DLinear'
 # rnn_base_model = 'PatchTST_real'
 # rnn_base_model = 'TCN'
-# rnn_base_model = 'FreTS'
+rnn_base_model = 'FreTS'
+baseline = False
 debugControl = False
 
 parser = argparse.ArgumentParser(description='Autoformer & Transformer family for Time Series Forecasting')
@@ -22,6 +23,7 @@ parser.add_argument('--is_training', type=int, required=False, default=1, help='
 parser.add_argument('--model_id', type=str, required=False, default='test', help='model id')
 parser.add_argument('--model', type=str, required=False, default='sampleTST',
                     help='model name, options: [Autoformer, Informer, Transformer]')
+parser.add_argument('--baseline', type=bool, required=False, default=False)
 
 # data loader
 parser.add_argument('--data', type=str, required=False, default='ETTh1', help='dataset type')
@@ -142,46 +144,21 @@ elif rnn_base_model == 'TCN':
                         help='number of hidden units per layer (default: 30)')
 #     parser.add_argument('--seed', type=int, default=1111,
 #                         help='random seed (default: 1111)')
-elif rnn_base_model == 'FreTS':
-    # Formers
-    parser.add_argument('--embed_type', type=int, default=0, help='0: default 1: value embedding + temporal embedding + positional embedding 2: value embedding + temporal embedding 3: value embedding + positional embedding 4: value embedding')
-    parser.add_argument('--enc_in', type=int, default=7, help='encoder input size')
-    parser.add_argument('--dec_in', type=int, default=7, help='decoder input size')
-    parser.add_argument('--c_out', type=int, default=7, help='output size')
-    parser.add_argument('--d_model', type=int, default=512, help='dimension of model')
-    parser.add_argument('--n_heads', type=int, default=8, help='num of heads')
-    parser.add_argument('--e_layers', type=int, default=2, help='num of encoder layers')
-    parser.add_argument('--d_layers', type=int, default=1, help='num of decoder layers')
-    parser.add_argument('--d_ff', type=int, default=2048, help='dimension of fcn')
-    parser.add_argument('--moving_avg', type=int, default=25, help='window size of moving average')
-    parser.add_argument('--factor', type=int, default=1, help='attn factor')
-    parser.add_argument('--distil', action='store_false',
-                        help='whether to use distilling in encoder, using this argument means not using distilling',
-                        default=True)
-    parser.add_argument('--dropout', type=float, default=0.05, help='dropout')
-    parser.add_argument('--embed', type=str, default='timeF',
-                        help='time features encoding, options:[timeF, fixed, learned]')
-    parser.add_argument('--activation', type=str, default='gelu', help='activation')
-    parser.add_argument('--output_attention', action='store_true', help='whether to output attention in ecoder')
-    parser.add_argument('--do_predict', action='store_true', help='whether to predict unseen future data')
-
-    # optimization
-    parser.add_argument('--num_workers', type=int, default=0, help='data loader num workers')
-    parser.add_argument('--itr', type=int, default=1, help='experiments times')
-    parser.add_argument('--train_epochs', type=int, default=10, help='train epochs')
-    parser.add_argument('--batch_size', type=int, default=8, help='batch size of train input data')
-    parser.add_argument('--patience', type=int, default=3, help='early stopping patience')
-    parser.add_argument('--learning_rate', type=float, default=0.0001, help='optimizer learning rate')
-    parser.add_argument('--des', type=str, default='Exp', help='exp description')
-    parser.add_argument('--loss', type=str, default='mse', help='loss function')
-    parser.add_argument('--lradj', type=str, default='type1', help='adjust learning rate')
-    parser.add_argument('--use_amp', action='store_true', help='use automatic mixed precision training', default=False)
-
 
 args = parser.parse_args()
 args.rnn_base_model = rnn_base_model
 args.debug = debugControl
 
+if baseline:
+    args.baseline = True
+    if rnn_base_model == 'TCN':
+        args.model = 'TCN_baseline'
+    elif rnn_base_model == 'FreTS':
+        args.model = 'FreTS_baseline'
+    else:
+        args.baseline = False
+        print('Failed to run baseline exp, because of chosen of wrong rnn_base_model')
+        exit(1)
 if rnn_base_model == 'UMixer':
     args.feature_in = 1
 elif rnn_base_model == 'TCN':
