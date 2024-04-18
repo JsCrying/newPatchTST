@@ -46,5 +46,5 @@ do
       --pct_start 0.2\
       --use_multi_gpu \
       --devices 0,1 \
-      --itr 1 --batch_size 40 --learning_rate 0.002424 >logs/LongForecasting/$model_name'_'$model_id_name'_'$seq_len'_'$pred_len.log
+      --itr 1 --batch_size 292 --learning_rate 0.002424 >logs/LongForecasting/$model_name'_'$model_id_name'_'$seq_len'_'$pred_len.log
 done

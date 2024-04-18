@@ -1,212 +1,97 @@
 Args in experiment:
-rnn_base_model = 'PatchTST_real'
-Namespace(random_seed=2021, is_training=1, model_id='96_336', model='PatchTST', data='ETTh2', root_path='./dataset/', data_path='ETTh2.csv', features='M', target='OT', freq='h', checkpoints='./checkpoints/', seq_len=96, label_len=48, pred_len=336, fc_dropout=0.3, head_dropout=0.0, patch_len=94, stride=53, padding_patch='end', revin=1, affine=0, subtract_last=0, decomposition=0, kernel_size=25, individual=0, embed_type=0, enc_in=7, dec_in=7, c_out=7, d_model=16, n_heads=4, e_layers=3, d_layers=1, d_ff=128, moving_avg=25, factor=1, distil=True, dropout=0.3, embed='timeF', activation='gelu', output_attention=False, do_predict=False, num_workers=10, itr=1, train_epochs=100, batch_size=400, patience=8, learning_rate=0.0002, des='Exp', loss='mse', lradj='type3', pct_start=0.3, use_amp=False, momentum=0.9669740372386173, frequency=0.05, sampling_rate=100, use_norm=True, hidden_size=1173, exp_name='MTSF', channel_independence=False, inverse=False, class_strategy='projection', target_root_path='./data/electricity/', target_data_path='electricity.csv', efficient_training=False, partial_start_index=0, top_k=5, num_kernels=6, use_gpu=True, gpu=0, use_multi_gpu=True, devices='0,1', test_flop=False, x=5, rnn_base_model='PatchTST_real', debug=False, feature_in=1, dvices='0,1', device_ids=[0, 1])
+rnn_base_model = 'FreTS'
+Namespace(random_seed=2021, is_training=1, model_id='96_336', model='FreTS_baseline', baseline=True, data='ETTh2', root_path='./dataset/', data_path='ETTh2.csv', features='M', target='OT', freq='h', checkpoints='./checkpoints/', seq_len=96, label_len=18, pred_len=336, fc_dropout=0.3, head_dropout=0.0, patch_len=94, stride=53, padding_patch='end', revin=1, affine=0, subtract_last=0, decomposition=0, kernel_size=25, individual=0, embed_type=0, enc_in=7, dec_in=7, c_out=7, d_model=16, n_heads=4, e_layers=3, d_layers=1, d_ff=128, moving_avg=25, factor=1, distil=True, dropout=0.3, embed='timeF', activation='gelu', output_attention=False, do_predict=False, num_workers=10, itr=1, train_epochs=100, batch_size=400, patience=8, learning_rate=0.0002, des='Exp', loss='mse', lradj='type3', pct_start=0.3, use_amp=False, momentum=0.9669740372386173, frequency=0.05, sampling_rate=100, use_norm=True, hidden_size=1173, exp_name='MTSF', channel_independence=False, inverse=False, class_strategy='projection', target_root_path='./data/electricity/', target_data_path='electricity.csv', efficient_training=False, partial_start_index=0, top_k=5, num_kernels=6, use_gpu=True, gpu=0, use_multi_gpu=True, devices='0,1', test_flop=False, x=5, rnn_base_model='FreTS', debug=False, dvices='0,1', device_ids=[0, 1])
 Use GPU: cuda:0
->>>>>>>start training : 96_336_PatchTST_ETTh2_ftM_sl96_ll48_pl336_dm16_nh4_el3_dl1_df128_fc1_ebtimeF_dtTrue_Exp_0>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>>>>>start training : 96_336_FreTS_baseline_ETTh2_ftM_sl96_ll18_pl336_dm16_nh4_el3_dl1_df128_fc1_ebtimeF_dtTrue_Exp_0>>>>>>>>>>>>>>>>>>>>>>>>>>
 train 8209
 val 2545
 test 2545
-Epoch: 1 cost time: 5.977176189422607
-[2024-04-15 17:19:30] [32mIntermediate result: 3.148854  (Index 0)[0m
-Epoch: 1, Steps: 20 | Train Loss: 1.0887214 Vali Loss: 1.4856108 Test Loss: 3.1488540
-Validation loss decreased (inf --> 1.485611).  Saving model ...
+Epoch: 1 cost time: 2.728073835372925
+[2024-04-18 14:20:25] [32mIntermediate result: 2.2749112  (Index 0)[0m
+Epoch: 1, Steps: 20 | Train Loss: 0.9733294 Vali Loss: 1.1428567 Test Loss: 2.2749112
+Validation loss decreased (inf --> 1.142857).  Saving model ...
 Updating learning rate to 0.0002
-Epoch: 2 cost time: 2.788604497909546
-[2024-04-15 17:19:34] [32mIntermediate result: 3.094494  (Index 1)[0m
-Epoch: 2, Steps: 20 | Train Loss: 1.0320199 Vali Loss: 1.4341139 Test Loss: 3.0944941
-Validation loss decreased (1.485611 --> 1.434114).  Saving model ...
+Epoch: 2 cost time: 1.35426664352417
+[2024-04-18 14:20:27] [32mIntermediate result: 1.1662346  (Index 1)[0m
+Epoch: 2, Steps: 20 | Train Loss: 1.3446282 Vali Loss: 0.7068031 Test Loss: 1.1662346
+Validation loss decreased (1.142857 --> 0.706803).  Saving model ...
 Updating learning rate to 0.0002
-Epoch: 3 cost time: 2.957317590713501
-[2024-04-15 17:19:39] [32mIntermediate result: 3.0689805  (Index 2)[0m
-Epoch: 3, Steps: 20 | Train Loss: 1.0176473 Vali Loss: 1.4147130 Test Loss: 3.0689805
-Validation loss decreased (1.434114 --> 1.414713).  Saving model ...
+Epoch: 3 cost time: 1.3736717700958252
+[2024-04-18 14:20:30] [32mIntermediate result: 0.8258927  (Index 2)[0m
+Epoch: 3, Steps: 20 | Train Loss: 0.6922111 Vali Loss: 0.5586373 Test Loss: 0.8258927
+Validation loss decreased (0.706803 --> 0.558637).  Saving model ...
 Updating learning rate to 0.0002
-Epoch: 4 cost time: 2.8786566257476807
-[2024-04-15 17:19:44] [32mIntermediate result: 3.056278  (Index 3)[0m
-Epoch: 4, Steps: 20 | Train Loss: 1.0080363 Vali Loss: 1.4056497 Test Loss: 3.0562780
-Validation loss decreased (1.414713 --> 1.405650).  Saving model ...
+Epoch: 4 cost time: 1.3664357662200928
+[2024-04-18 14:20:32] [32mIntermediate result: 0.59345716  (Index 3)[0m
+Epoch: 4, Steps: 20 | Train Loss: 0.6338368 Vali Loss: 0.4661627 Test Loss: 0.5934572
+Validation loss decreased (0.558637 --> 0.466163).  Saving model ...
 Updating learning rate to 0.00018
-Epoch: 5 cost time: 2.8485398292541504
-[2024-04-15 17:19:49] [32mIntermediate result: 3.0578506  (Index 4)[0m
-Epoch: 5, Steps: 20 | Train Loss: 1.0002946 Vali Loss: 1.4110980 Test Loss: 3.0578506
-EarlyStopping counter: 1 out of 8
+Epoch: 5 cost time: 1.419785976409912
+[2024-04-18 14:20:35] [32mIntermediate result: 0.5859686  (Index 4)[0m
+Epoch: 5, Steps: 20 | Train Loss: 0.6081963 Vali Loss: 0.4564903 Test Loss: 0.5859686
+Validation loss decreased (0.466163 --> 0.456490).  Saving model ...
 Updating learning rate to 0.000162
-Epoch: 6 cost time: 2.848180055618286
-[2024-04-15 17:19:53] [32mIntermediate result: 3.052447  (Index 5)[0m
-Epoch: 6, Steps: 20 | Train Loss: 0.9973613 Vali Loss: 1.4126152 Test Loss: 3.0524471
-EarlyStopping counter: 2 out of 8
+Epoch: 6 cost time: 1.3474900722503662
+[2024-04-18 14:20:38] [32mIntermediate result: 0.55201566  (Index 5)[0m
+Epoch: 6, Steps: 20 | Train Loss: 0.6016399 Vali Loss: 0.4375925 Test Loss: 0.5520157
+Validation loss decreased (0.456490 --> 0.437593).  Saving model ...
 Updating learning rate to 0.00014580000000000002
-Epoch: 7 cost time: 2.8591902256011963
-[2024-04-15 17:19:58] [32mIntermediate result: 3.0423546  (Index 6)[0m
-Epoch: 7, Steps: 20 | Train Loss: 0.9974629 Vali Loss: 1.4018369 Test Loss: 3.0423546
-Validation loss decreased (1.405650 --> 1.401837).  Saving model ...
+Epoch: 7 cost time: 1.3634891510009766
+[2024-04-18 14:20:40] [32mIntermediate result: 0.6470254  (Index 6)[0m
+Epoch: 7, Steps: 20 | Train Loss: 0.5956370 Vali Loss: 0.4780347 Test Loss: 0.6470254
+EarlyStopping counter: 1 out of 8
 Updating learning rate to 0.00013122
-Epoch: 8 cost time: 2.890533208847046
-[2024-04-15 17:20:03] [32mIntermediate result: 3.02964  (Index 7)[0m
-Epoch: 8, Steps: 20 | Train Loss: 0.9930989 Vali Loss: 1.3944697 Test Loss: 3.0296400
-Validation loss decreased (1.401837 --> 1.394470).  Saving model ...
+Epoch: 8 cost time: 1.374082326889038
+[2024-04-18 14:20:43] [32mIntermediate result: 0.59588414  (Index 7)[0m
+Epoch: 8, Steps: 20 | Train Loss: 0.5918012 Vali Loss: 0.4523793 Test Loss: 0.5958841
+EarlyStopping counter: 2 out of 8
 Updating learning rate to 0.00011809800000000002
-Epoch: 9 cost time: 2.918853521347046
-[2024-04-15 17:20:07] [32mIntermediate result: 3.0063696  (Index 8)[0m
-Epoch: 9, Steps: 20 | Train Loss: 0.9966516 Vali Loss: 1.3768978 Test Loss: 3.0063696
-Validation loss decreased (1.394470 --> 1.376898).  Saving model ...
+Epoch: 9 cost time: 1.3660554885864258
+[2024-04-18 14:20:45] [32mIntermediate result: 0.52513963  (Index 8)[0m
+Epoch: 9, Steps: 20 | Train Loss: 0.5856958 Vali Loss: 0.4292542 Test Loss: 0.5251396
+Validation loss decreased (0.437593 --> 0.429254).  Saving model ...
 Updating learning rate to 0.00010628820000000001
-Epoch: 10 cost time: 3.0032083988189697
-[2024-04-15 17:20:12] [32mIntermediate result: 2.9951632  (Index 9)[0m
-Epoch: 10, Steps: 20 | Train Loss: 0.9960402 Vali Loss: 1.3645488 Test Loss: 2.9951632
-Validation loss decreased (1.376898 --> 1.364549).  Saving model ...
+Epoch: 10 cost time: 1.3649237155914307
+[2024-04-18 14:20:48] [32mIntermediate result: 0.59882694  (Index 9)[0m
+Epoch: 10, Steps: 20 | Train Loss: 0.5860846 Vali Loss: 0.4527905 Test Loss: 0.5988269
+EarlyStopping counter: 1 out of 8
 Updating learning rate to 9.565938000000003e-05
-Epoch: 11 cost time: 2.9235615730285645
-[2024-04-15 17:20:17] [32mIntermediate result: 2.9923346  (Index 10)[0m
-Epoch: 11, Steps: 20 | Train Loss: 0.9917390 Vali Loss: 1.3779896 Test Loss: 2.9923346
-EarlyStopping counter: 1 out of 8
+Epoch: 11 cost time: 1.367480993270874
+[2024-04-18 14:20:50] [32mIntermediate result: 0.54037017  (Index 10)[0m
+Epoch: 11, Steps: 20 | Train Loss: 0.5820041 Vali Loss: 0.4298616 Test Loss: 0.5403702
+EarlyStopping counter: 2 out of 8
 Updating learning rate to 8.609344200000003e-05
-Epoch: 12 cost time: 2.924471378326416
-[2024-04-15 17:20:22] [32mIntermediate result: 2.9776757  (Index 11)[0m
-Epoch: 12, Steps: 20 | Train Loss: 0.9900458 Vali Loss: 1.3620862 Test Loss: 2.9776757
-Validation loss decreased (1.364549 --> 1.362086).  Saving model ...
+Epoch: 12 cost time: 1.3559818267822266
+[2024-04-18 14:20:53] [32mIntermediate result: 0.5409861  (Index 11)[0m
+Epoch: 12, Steps: 20 | Train Loss: 0.5814558 Vali Loss: 0.4343505 Test Loss: 0.5409861
+EarlyStopping counter: 3 out of 8
 Updating learning rate to 7.748409780000002e-05
-Epoch: 13 cost time: 2.927036762237549
-[2024-04-15 17:20:27] [32mIntermediate result: 2.9624894  (Index 12)[0m
-Epoch: 13, Steps: 20 | Train Loss: 0.9915877 Vali Loss: 1.3572435 Test Loss: 2.9624894
-Validation loss decreased (1.362086 --> 1.357244).  Saving model ...
+Epoch: 13 cost time: 1.3767287731170654
+[2024-04-18 14:20:55] [32mIntermediate result: 0.57829  (Index 12)[0m
+Epoch: 13, Steps: 20 | Train Loss: 0.5817035 Vali Loss: 0.4401149 Test Loss: 0.5782900
+EarlyStopping counter: 4 out of 8
 Updating learning rate to 6.973568802000002e-05
-Epoch: 14 cost time: 2.8168692588806152
-[2024-04-15 17:20:31] [32mIntermediate result: 2.9701662  (Index 13)[0m
-Epoch: 14, Steps: 20 | Train Loss: 0.9892149 Vali Loss: 1.3620205 Test Loss: 2.9701662
-EarlyStopping counter: 1 out of 8
+Epoch: 14 cost time: 1.367737054824829
+[2024-04-18 14:20:58] [32mIntermediate result: 0.5312515  (Index 13)[0m
+Epoch: 14, Steps: 20 | Train Loss: 0.5816151 Vali Loss: 0.4303054 Test Loss: 0.5312515
+EarlyStopping counter: 5 out of 8
 Updating learning rate to 6.276211921800002e-05
-Epoch: 15 cost time: 2.944249391555786
-[2024-04-15 17:20:36] [32mIntermediate result: 2.977809  (Index 14)[0m
-Epoch: 15, Steps: 20 | Train Loss: 0.9870170 Vali Loss: 1.3676161 Test Loss: 2.9778090
-EarlyStopping counter: 2 out of 8
+Epoch: 15 cost time: 1.3814990520477295
+[2024-04-18 14:21:00] [32mIntermediate result: 0.5609352  (Index 14)[0m
+Epoch: 15, Steps: 20 | Train Loss: 0.5793611 Vali Loss: 0.4352348 Test Loss: 0.5609352
+EarlyStopping counter: 6 out of 8
 Updating learning rate to 5.648590729620002e-05
-Epoch: 16 cost time: 2.974478006362915
-[2024-04-15 17:20:41] [32mIntermediate result: 2.9686832  (Index 15)[0m
-Epoch: 16, Steps: 20 | Train Loss: 0.9907729 Vali Loss: 1.3631948 Test Loss: 2.9686832
-EarlyStopping counter: 3 out of 8
+Epoch: 16 cost time: 1.3695917129516602
+[2024-04-18 14:21:03] [32mIntermediate result: 0.5780646  (Index 15)[0m
+Epoch: 16, Steps: 20 | Train Loss: 0.5800623 Vali Loss: 0.4448184 Test Loss: 0.5780646
+EarlyStopping counter: 7 out of 8
 Updating learning rate to 5.083731656658002e-05
-Epoch: 17 cost time: 2.915140390396118
-[2024-04-15 17:20:46] [32mIntermediate result: 2.9643934  (Index 16)[0m
-Epoch: 17, Steps: 20 | Train Loss: 0.9909330 Vali Loss: 1.3553723 Test Loss: 2.9643934
-Validation loss decreased (1.357244 --> 1.355372).  Saving model ...
-Updating learning rate to 4.575358490992202e-05
-Epoch: 18 cost time: 2.9904885292053223
-[2024-04-15 17:20:51] [32mIntermediate result: 2.954072  (Index 17)[0m
-Epoch: 18, Steps: 20 | Train Loss: 0.9889891 Vali Loss: 1.3507828 Test Loss: 2.9540720
-Validation loss decreased (1.355372 --> 1.350783).  Saving model ...
-Updating learning rate to 4.117822641892981e-05
-Epoch: 19 cost time: 3.0435538291931152
-[2024-04-15 17:20:55] [32mIntermediate result: 2.9511049  (Index 18)[0m
-Epoch: 19, Steps: 20 | Train Loss: 0.9896909 Vali Loss: 1.3563639 Test Loss: 2.9511049
-EarlyStopping counter: 1 out of 8
-Updating learning rate to 3.706040377703683e-05
-Epoch: 20 cost time: 2.932297706604004
-[2024-04-15 17:21:00] [32mIntermediate result: 2.952213  (Index 19)[0m
-Epoch: 20, Steps: 20 | Train Loss: 0.9914657 Vali Loss: 1.3533473 Test Loss: 2.9522130
-EarlyStopping counter: 2 out of 8
-Updating learning rate to 3.3354363399333154e-05
-Epoch: 21 cost time: 2.863506555557251
-[2024-04-15 17:21:05] [32mIntermediate result: 2.9496133  (Index 20)[0m
-Epoch: 21, Steps: 20 | Train Loss: 0.9915773 Vali Loss: 1.3503574 Test Loss: 2.9496133
-Validation loss decreased (1.350783 --> 1.350357).  Saving model ...
-Updating learning rate to 3.0018927059399838e-05
-Epoch: 22 cost time: 2.9864718914031982
-[2024-04-15 17:21:10] [32mIntermediate result: 2.9494698  (Index 21)[0m
-Epoch: 22, Steps: 20 | Train Loss: 0.9883829 Vali Loss: 1.3513883 Test Loss: 2.9494698
-EarlyStopping counter: 1 out of 8
-Updating learning rate to 2.7017034353459858e-05
-Epoch: 23 cost time: 2.9582576751708984
-[2024-04-15 17:21:15] [32mIntermediate result: 2.948244  (Index 22)[0m
-Epoch: 23, Steps: 20 | Train Loss: 0.9906482 Vali Loss: 1.3473983 Test Loss: 2.9482441
-Validation loss decreased (1.350357 --> 1.347398).  Saving model ...
-Updating learning rate to 2.431533091811387e-05
-Epoch: 24 cost time: 3.042057752609253
-[2024-04-15 17:21:20] [32mIntermediate result: 2.9468958  (Index 23)[0m
-Epoch: 24, Steps: 20 | Train Loss: 0.9866740 Vali Loss: 1.3538399 Test Loss: 2.9468958
-EarlyStopping counter: 1 out of 8
-Updating learning rate to 2.1883797826302484e-05
-Epoch: 25 cost time: 2.9327211380004883
-[2024-04-15 17:21:24] [32mIntermediate result: 2.944335  (Index 24)[0m
-Epoch: 25, Steps: 20 | Train Loss: 0.9872659 Vali Loss: 1.3509504 Test Loss: 2.9443350
-EarlyStopping counter: 2 out of 8
-Updating learning rate to 1.9695418043672237e-05
-Epoch: 26 cost time: 2.952796697616577
-[2024-04-15 17:21:29] [32mIntermediate result: 2.9473493  (Index 25)[0m
-Epoch: 26, Steps: 20 | Train Loss: 0.9874608 Vali Loss: 1.3518815 Test Loss: 2.9473493
-EarlyStopping counter: 3 out of 8
-Updating learning rate to 1.7725876239305016e-05
-Epoch: 27 cost time: 2.9600677490234375
-[2024-04-15 17:21:34] [32mIntermediate result: 2.950372  (Index 26)[0m
-Epoch: 27, Steps: 20 | Train Loss: 0.9858221 Vali Loss: 1.3514107 Test Loss: 2.9503720
-EarlyStopping counter: 4 out of 8
-Updating learning rate to 1.595328861537451e-05
-Epoch: 28 cost time: 2.846921443939209
-[2024-04-15 17:21:38] [32mIntermediate result: 2.9511755  (Index 27)[0m
-Epoch: 28, Steps: 20 | Train Loss: 0.9880949 Vali Loss: 1.3553742 Test Loss: 2.9511755
-EarlyStopping counter: 5 out of 8
-Updating learning rate to 1.4357959753837061e-05
-Epoch: 29 cost time: 2.9842395782470703
-[2024-04-15 17:21:43] [32mIntermediate result: 2.9495037  (Index 28)[0m
-Epoch: 29, Steps: 20 | Train Loss: 0.9876090 Vali Loss: 1.3475183 Test Loss: 2.9495037
-EarlyStopping counter: 6 out of 8
-Updating learning rate to 1.2922163778453355e-05
-Epoch: 30 cost time: 2.907424211502075
-[2024-04-15 17:21:48] [32mIntermediate result: 2.9499989  (Index 29)[0m
-Epoch: 30, Steps: 20 | Train Loss: 0.9824400 Vali Loss: 1.3496977 Test Loss: 2.9499989
-EarlyStopping counter: 7 out of 8
-Updating learning rate to 1.1629947400608019e-05
-Epoch: 31 cost time: 2.878631830215454
-[2024-04-15 17:21:53] [32mIntermediate result: 2.9466877  (Index 30)[0m
-Epoch: 31, Steps: 20 | Train Loss: 0.9901555 Vali Loss: 1.3429470 Test Loss: 2.9466877
-Validation loss decreased (1.347398 --> 1.342947).  Saving model ...
-Updating learning rate to 1.046695266054722e-05
-Epoch: 32 cost time: 3.046823740005493
-[2024-04-15 17:21:58] [32mIntermediate result: 2.9458923  (Index 31)[0m
-Epoch: 32, Steps: 20 | Train Loss: 0.9822783 Vali Loss: 1.3413597 Test Loss: 2.9458923
-Validation loss decreased (1.342947 --> 1.341360).  Saving model ...
-Updating learning rate to 9.420257394492498e-06
-Epoch: 33 cost time: 2.9127750396728516
-[2024-04-15 17:22:02] [32mIntermediate result: 2.9474566  (Index 32)[0m
-Epoch: 33, Steps: 20 | Train Loss: 0.9843328 Vali Loss: 1.3453187 Test Loss: 2.9474566
-EarlyStopping counter: 1 out of 8
-Updating learning rate to 8.478231655043248e-06
-Epoch: 34 cost time: 2.834336996078491
-[2024-04-15 17:22:07] [32mIntermediate result: 2.9420118  (Index 33)[0m
-Epoch: 34, Steps: 20 | Train Loss: 0.9822777 Vali Loss: 1.3545618 Test Loss: 2.9420118
-EarlyStopping counter: 2 out of 8
-Updating learning rate to 7.630408489538923e-06
-Epoch: 35 cost time: 2.9785027503967285
-[2024-04-15 17:22:12] [32mIntermediate result: 2.9425871  (Index 34)[0m
-Epoch: 35, Steps: 20 | Train Loss: 0.9837508 Vali Loss: 1.3594790 Test Loss: 2.9425871
-EarlyStopping counter: 3 out of 8
-Updating learning rate to 6.8673676405850304e-06
-Epoch: 36 cost time: 2.939579725265503
-[2024-04-15 17:22:17] [32mIntermediate result: 2.9448502  (Index 35)[0m
-Epoch: 36, Steps: 20 | Train Loss: 0.9878642 Vali Loss: 1.3454007 Test Loss: 2.9448502
-EarlyStopping counter: 4 out of 8
-Updating learning rate to 6.180630876526528e-06
-Epoch: 37 cost time: 2.949756145477295
-[2024-04-15 17:22:22] [32mIntermediate result: 2.9445355  (Index 36)[0m
-Epoch: 37, Steps: 20 | Train Loss: 0.9851668 Vali Loss: 1.3469825 Test Loss: 2.9445355
-EarlyStopping counter: 5 out of 8
-Updating learning rate to 5.562567788873875e-06
-Epoch: 38 cost time: 2.9959962368011475
-[2024-04-15 17:22:27] [32mIntermediate result: 2.9495976  (Index 37)[0m
-Epoch: 38, Steps: 20 | Train Loss: 0.9881632 Vali Loss: 1.3517007 Test Loss: 2.9495976
-EarlyStopping counter: 6 out of 8
-Updating learning rate to 5.006311009986488e-06
-Epoch: 39 cost time: 2.943868398666382
-[2024-04-15 17:22:31] [32mIntermediate result: 2.9464216  (Index 38)[0m
-Epoch: 39, Steps: 20 | Train Loss: 0.9856001 Vali Loss: 1.3533422 Test Loss: 2.9464216
-EarlyStopping counter: 7 out of 8
-Updating learning rate to 4.505679908987839e-06
-Epoch: 40 cost time: 2.8635873794555664
-[2024-04-15 17:22:36] [32mIntermediate result: 2.944329  (Index 39)[0m
-Epoch: 40, Steps: 20 | Train Loss: 0.9890117 Vali Loss: 1.3464323 Test Loss: 2.9443290
+Epoch: 17 cost time: 1.364377498626709
+[2024-04-18 14:21:05] [32mIntermediate result: 0.57566696  (Index 16)[0m
+Epoch: 17, Steps: 20 | Train Loss: 0.5763598 Vali Loss: 0.4418050 Test Loss: 0.5756670
 EarlyStopping counter: 8 out of 8
 Early stopping
->>>>>>>testing : 96_336_PatchTST_ETTh2_ftM_sl96_ll48_pl336_dm16_nh4_el3_dl1_df128_fc1_ebtimeF_dtTrue_Exp_0<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+>>>>>>>testing : 96_336_FreTS_baseline_ETTh2_ftM_sl96_ll18_pl336_dm16_nh4_el3_dl1_df128_fc1_ebtimeF_dtTrue_Exp_0<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 test 2545
-mse:2.9458911418914795, mae:1.3158921003341675, rse:1.3718194961547852
-[2024-04-15 17:22:38] [32mFinal result: 2.9458911[0m
+mse:0.5251398086547852, mae:0.5126950740814209, rse:0.5791966915130615
+[2024-04-18 14:21:06] [32mFinal result: 0.5251398[0m
