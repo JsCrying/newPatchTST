@@ -10,7 +10,7 @@ import numpy as np
 # rnn_base_model = 'PatchTST_real'
 # rnn_base_model = 'TCN'
 rnn_base_model = 'FreTS'
-baseline = False
+baseline = True
 debugControl = False
 
 parser = argparse.ArgumentParser(description='Autoformer & Transformer family for Time Series Forecasting')

@@ -37,7 +37,7 @@ do
       --fc_dropout 0.2\
       --head_dropout 0\
       --patch_len 81\
-      --stride 5\
+      --stride 50\
       --hidden_size 1078\
       --des 'Exp' \
       --train_epochs 100\
@@ -46,5 +46,5 @@ do
       --pct_start 0.2\
       --use_multi_gpu \
       --devices 0,1 \
-      --itr 1 --batch_size 292 --learning_rate 0.002424 >logs/LongForecasting/$model_name'_'$model_id_name'_'$seq_len'_'$pred_len.log
+      --itr 1 --batch_size 80 --learning_rate 0.002424 >logs/LongForecasting/$model_name'_'$model_id_name'_'$seq_len'_'$pred_len.log
 done
